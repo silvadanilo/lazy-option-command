@@ -1,0 +1,30 @@
+{
+    "name": "silvadanilo/lazyOptionCommand",
+    "description": "LazyOptionCommand gives you the opportunity to declare an option as lazyi, and it will be prompt to the user if it is missing!",
+    "keywords": ["console"],
+    "homepage": "http://silvadanilo.github.io/lazyOptionCommand",
+    "license": "MIT",
+        "authors": [
+        {
+            "name": "Danilo Silva",
+            "email": "silva.danilo82@gmail.com",
+            "homepage": "https://www.linkedin.com/in/realizzazionesitiweb"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/console": "~2.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~3.7"
+    },
+    "autoload": {
+        "psr-0": { "LazyOptionCommand": "src/" }
+    },
+    "autoload-dev": {
+        "psr-0": { "LazyOptionCommand\\Test": "tests/" }
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+}
