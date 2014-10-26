@@ -18,6 +18,7 @@ class InteractiveInput implements InputInterface
     private $input;
     private $output;
     private $helper;
+    private $definition;
     private $optionEnricher;
 
     public function __construct(InputInterface $input, OutputInterface $output, QuestionHelper $helper)
@@ -122,7 +123,7 @@ class InteractiveInput implements InputInterface
      */
     public function setArgument($name, $value)
     {
-        return $this->input->setArguments($name, $value);
+        return $this->input->setArgument($name, $value);
     }
 
     /**
@@ -130,7 +131,7 @@ class InteractiveInput implements InputInterface
      */
     public function hasArgument($name)
     {
-        return $this->input->setArguments($name, $value);
+        return $this->input->hasArgument($name);
     }
 
     /**
