@@ -1,13 +1,14 @@
 {
-    "name": "silvadanilo/lazyOptionCommand",
+    "name": "silvadanilo/lazy-option-command",
     "description": "LazyOptionCommand gives you the opportunity to declare an option as lazyi, and it will be prompt to the user if it is missing!",
     "keywords": ["console"],
-    "homepage": "http://silvadanilo.github.io/lazyOptionCommand",
+    "homepage": "https://github.com/silvadanilo/lazy-option-command",
     "license": "MIT",
-        "authors": [
+    "minimum-stability": "dev",
+    "authors": [
         {
             "name": "Danilo Silva",
-            "email": "silva.danilo82@gmail.com",
+            "email": "badkill82@gmail.com",
             "homepage": "https://www.linkedin.com/in/realizzazionesitiweb"
         }
     ],
