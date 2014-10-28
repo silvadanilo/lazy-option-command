@@ -1,54 +1,84 @@
 <?php
 namespace LazyOptionCommand\Input;
 
+use LazyOptionCommand\Question\KeyChoiceQuestion;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Helper\QuestionHelper;
 
 class LazyInputOption extends InputOption
 {
-    const OPTION_IS_LAZY = 16;
-
+    private $name;
     private $inputOption;
-    private $isLazy = false;
-    private $lazyValue;
+    private $question;
 
-    public function __construct($name, $shortcut = null, $mode = null, $description = '', $default = null, $lazyValue = null)
+    public function __construct($name, $shortcut = null, $mode = null, $description = '', $default = null, $question = null)
     {
-        parent::__construct($name, $shortcut, $this->normalizeMode($mode), $description, $default);
-        $this->lazyValue = $lazyValue;
+        parent::__construct($name, $shortcut, $mode, $description, $default);
+        $this->name = $name;
+        $this->question = $question;
     }
 
-    public function isLazy()
+    public function question(InputInterface $input)
     {
-        return $this->isLazy;
+        $availableValues = $this->availableValues($input);
+
+        if (is_null($availableValues) || empty($availableValues)) {
+            return $this->stringQuestion();
+        }
+
+        if (is_array($availableValues)) {
+            return $this->choiceQuestion($availableValues);
+        }
+
+        if (is_object($availableValues) && $availableValues instanceof Question) {
+            return $availableValues;
+        }
+
+        throw new \RuntimeException('Value type: `'.gettype($availableValues).'`' . ' is not handled');
     }
 
-    public function availableValues(InputInterface $input)
+    private function stringQuestion()
+    {
+        return new Question("The {$this->name} option is mandatory; Please enter a value for it");
+    }
+
+    private function choiceQuestion(array $availableValues)
+    {
+        if (0 === count($availableValues)) {
+            return null;
+        }
+
+        if (1 === count($availableValues)) {
+            return key($availableValues);
+        }
+
+        $name = $this->name;
+        $question = new KeyChoiceQuestion(
+            "{$name} option is mandatory, choose between:",
+            $availableValues,
+            array_keys($availableValues)[0]
+        );
+        $question->setMaxAttempts(5);
+
+        return $question;
+    }
+
+    private function availableValues(InputInterface $input)
     {
         $availableValues = null;
 
-        if ($this->lazyValue) {
-            if (is_callable($this->lazyValue)) {
-                $availableValues = call_user_func($this->lazyValue, $input);
+        if ($this->question) {
+            if (is_callable($this->question)) {
+                $availableValues = call_user_func($this->question, $input);
             } else {
-                $availableValues = $this->lazyValue;
+                $availableValues = $this->question;
             }
         }
 
         return $availableValues;
-    }
-
-    private function normalizeMode($mode)
-    {
-        if ($mode < self::OPTION_IS_LAZY) {
-            return $mode;
-        }
-
-        $this->isLazy = true;
-
-        return $mode ^ self::OPTION_IS_LAZY;
     }
 }

@@ -23,9 +23,9 @@ class InteractiveInput implements InputInterface
 
     public function __construct(InputInterface $input, OutputInterface $output, QuestionHelper $helper)
     {
-        $this->input  = $input;
-        $this->helper = $helper;
-        $this->optionEnricher = new OptionsEnricher($this, $output, $helper);
+        $this->input          = $input;
+        $this->output         = $output;
+        $this->helper         = $helper;
     }
 
     /**
@@ -46,8 +46,14 @@ class InteractiveInput implements InputInterface
         }
 
         $option = $this->definition->getOption($name);
-        if ($option instanceof LazyInputOption && $option->isLazy()) {
-            return $this->optionEnricher->enrich($option->getName(), $option->availableValues($this));
+        if ($option instanceof LazyInputOption) {
+            $question = $option->question($this->input);
+            if (is_scalar($question)) {
+                $value = $question;
+            } else {
+                $value = $this->helper->ask($this->input, $this->output, $question);
+            }
+            $this->input->setOption($name, $value);
         }
 
         return null;

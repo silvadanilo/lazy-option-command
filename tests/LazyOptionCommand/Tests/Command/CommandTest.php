@@ -103,17 +103,10 @@ class SampleCommand extends Command
         parent::configure();
 
         $this->setName('sample:command')
-            ->addOption([
-                'name'        => 'sample',
-                'shortcut'    => 's',
-                'mode'        => InputOption::VALUE_REQUIRED,
-                'description' => 'sample',
-                'default'     => null
-            ])
-            ->addOption(new LazyInputOption(
+            ->addRawOption(new LazyInputOption(
                 'option',
                 'o',
-                InputOption::VALUE_OPTIONAL | LazyInputOption::OPTION_IS_LAZY,
+                InputOption::VALUE_OPTIONAL,
                 'sample option',
                 null,
                 function () {
