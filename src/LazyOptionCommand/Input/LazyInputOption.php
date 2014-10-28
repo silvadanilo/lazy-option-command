@@ -60,7 +60,7 @@ class LazyInputOption extends InputOption
         $question = new KeyChoiceQuestion(
             "{$name} option is mandatory, choose between:",
             $availableValues,
-            array_keys($availableValues)[0]
+            array_shift(array_keys($availableValues))
         );
         $question->setMaxAttempts(5);
 
