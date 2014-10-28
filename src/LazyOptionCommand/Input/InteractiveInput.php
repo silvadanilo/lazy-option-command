@@ -53,7 +53,10 @@ class InteractiveInput implements InputInterface
             } else {
                 $value = $this->helper->ask($this->input, $this->output, $question);
             }
+
             $this->input->setOption($name, $value);
+
+            return $value;
         }
 
         return null;
