@@ -18,18 +18,18 @@ class CommandTest extends \PHPUnit_Framework_TestCase
 
     public function testAskForMandatoryOptionsIfThemAreMissingAndEnrichOptions()
     {
-        $command = new SampleCommand(array(
+        $command = new SampleCommand([
             'foo' => 'bar',
             'bar' => 'foo',
-        ));
+        ]);
         $this->application->add($command);
 
         $this->runtimeInputIs($command, "foo");
 
         $commandTester = new CommandTester($command);
-        $commandTester->execute(array(
+        $commandTester->execute([
             'command' => $command->getName(),
-        ));
+        ]);
 
         $this->assertEquals('foo', $commandTester->getInput()->getOption('option'));
         $this->assertRegExp("/foo.*bar\n.*bar.*foo/", $commandTester->getDisplay());
@@ -37,17 +37,17 @@ class CommandTest extends \PHPUnit_Framework_TestCase
 
     public function testEnrichOptionsWithoutAskingForAMissingMandatoryOptionsWithOnlyOneValue()
     {
-        $command = new SampleCommand(array(
+        $command = new SampleCommand([
             'key' => 'key should not be showed',
-        ));
+        ]);
         $this->application->add($command);
 
         $this->runtimeInputIsNotNecessary();
 
         $commandTester = new CommandTester($command);
-        $commandTester->execute(array(
+        $commandTester->execute([
             'command' => $command->getName(),
-        ));
+        ]);
 
         $this->assertEquals('key', $commandTester->getInput()->getOption('option'));
         $this->assertNotRegExp("/key/", $commandTester->getDisplay());
@@ -61,9 +61,9 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         $this->runtimeInputIs($command, "free response");
 
         $commandTester = new CommandTester($command);
-        $commandTester->execute(array(
+        $commandTester->execute([
             'command' => $command->getName(),
-        ));
+        ]);
 
         $this->assertEquals('free response', $commandTester->getInput()->getOption('option'));
     }

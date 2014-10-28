@@ -15,10 +15,10 @@ class LazyInputOptionTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnsAKeyChoiceQuestionWhenAvailableValuesIsACallbackThatReturnsAnArray()
     {
-        $availableValues = array(
+        $availableValues = [
             'foo' => 'bar',
             'bar' => 'foo'
-        );
+        ];
 
         $option = new LazyInputOption(
             'sample',
@@ -34,7 +34,7 @@ class LazyInputOptionTest extends \PHPUnit_Framework_TestCase
         $expectedQuestion = new KeyChoiceQuestion(
             "sample option is mandatory, choose between:",
             $availableValues,
-            array_shift(array_keys($availableValues))
+            array_keys($availableValues)[0]
         );
         $expectedQuestion->setMaxAttempts(5);
 
@@ -43,9 +43,9 @@ class LazyInputOptionTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnsAValueWhenAvailableValuesIsACallbackThatReturnsASingleValue()
     {
-        $availableValues = array(
+        $availableValues = [
             'foo' => 'bar'
-        );
+        ];
 
         $option = new LazyInputOption(
             'option',
@@ -61,7 +61,7 @@ class LazyInputOptionTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnsAQuestionWhenAvailableValuesIsNullOrAnEmptyArray()
     {
-        $availableValues = array();
+        $availableValues = [];
 
         $option = new LazyInputOption(
             'sample',
@@ -82,9 +82,9 @@ class LazyInputOptionTest extends \PHPUnit_Framework_TestCase
 
     public function testIfAvailableValuesIsAnInstanceOfQuestionItIsReturnedDirectly()
     {
-        $availableValues = new KeyChoiceQuestion('choose: ', array(
+        $availableValues = new KeyChoiceQuestion('choose: ', [
             'foo' => 'bar'
-        ));
+        ]);
 
         $option = new LazyInputOption(
             'option',
