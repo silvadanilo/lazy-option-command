@@ -47,7 +47,7 @@ class InteractiveInput implements InputInterface
 
         $option = $this->definition->getOption($name);
         if ($option instanceof LazyInputOption) {
-            $question = $option->question($this->input);
+            $question = $option->question($this);
             if (is_scalar($question)) {
                 $value = $question;
             } else {
