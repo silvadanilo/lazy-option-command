@@ -14,12 +14,19 @@ class LazyInputOption extends InputOption
     private $name;
     private $inputOption;
     private $question;
+    private $default;
 
     public function __construct($name, $shortcut = null, $mode = null, $description = '', $default = null, $question = null)
     {
         parent::__construct($name, $shortcut, $mode, $description, $default);
         $this->name = $name;
         $this->question = $question;
+        $this->default = $default;
+    }
+
+    public function getDefault()
+    {
+        return null;
     }
 
     public function question(InputInterface $input)
@@ -43,7 +50,7 @@ class LazyInputOption extends InputOption
 
     private function stringQuestion()
     {
-        return new Question("The {$this->name} option is mandatory; Please enter a value for it");
+        return new Question("The {$this->name} option is mandatory; Please enter a value for it: [<info>{$this->default}</info>] ", $this->default);
     }
 
     private function choiceQuestion(array $availableValues)
@@ -57,7 +64,11 @@ class LazyInputOption extends InputOption
         }
 
         $name = $this->name;
-        $question = new KeyChoiceQuestion(
+        $questionClass = array_values($availableValues) === $availableValues ?
+            'Symfony\Component\Console\Question\ChoiceQuestion' :
+            'LazyOptionCommand\Question\KeyChoiceQuestion'
+        ;
+        $question = new $questionClass(
             "{$name} option is mandatory, choose between:",
             $availableValues,
             array_keys($availableValues)[0]
